@@ -1,9 +1,6 @@
-import 'package:ecommerce_app/main.dart';
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:ecommerce_app/src/constants/breakpoints.dart';
-import 'package:ecommerce_app/src/features/authentication/presentation/account/account_screen.dart';
-import 'package:ecommerce_app/src/features/orders/presentation/orders_list/orders_list_screen.dart';
-import 'package:ecommerce_app/src/features/authentication/presentation/sign_in/email_password_sign_in_screen.dart';
-import 'package:ecommerce_app/src/features/authentication/presentation/sign_in/email_password_sign_in_state.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
 import 'package:ecommerce_app/src/features/authentication/domain/app_user.dart';
 import 'package:ecommerce_app/src/routing/app_router.dart';
