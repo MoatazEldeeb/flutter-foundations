@@ -23,8 +23,7 @@ class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // TODO: get user from auth repository
-    final user = ref.read(authStateChangesProvider).value;
+    final user = ref.watch(authStateChangesProvider).value;
     // * This widget is responsive.
     // * On large screen sizes, it shows all the actions in the app bar.
     // * On small screen sizes, it shows only the shopping cart icon and a
@@ -50,18 +49,18 @@ class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
             ActionTextButton(
               key: MoreMenuButton.ordersKey,
               text: 'Orders'.hardcoded,
-              onPressed: () => context.pushNamed(AppRoute.orders.name),
+              onPressed: () => context.goNamed(AppRoute.orders.name),
             ),
             ActionTextButton(
               key: MoreMenuButton.accountKey,
               text: 'Account'.hardcoded,
-              onPressed: () => context.pushNamed(AppRoute.account.name),
+              onPressed: () => context.goNamed(AppRoute.account.name),
             ),
           ] else
             ActionTextButton(
               key: MoreMenuButton.signInKey,
               text: 'Sign In'.hardcoded,
-              onPressed: () => context.pushNamed(AppRoute.signIn.name),
+              onPressed: () => context.goNamed(AppRoute.signIn.name),
             )
         ],
       );
