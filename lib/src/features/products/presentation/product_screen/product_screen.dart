@@ -1,8 +1,6 @@
 // ignore_for_file: unnecessary_null_comparison
 
 import 'package:ecommerce_app/src/common_widgets/async_value_widget.dart';
-import 'package:ecommerce_app/src/common_widgets/error_message_widget.dart';
-import 'package:ecommerce_app/src/constants/test_products.dart';
 import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
 import 'package:ecommerce_app/src/utils/currency_formatter.dart';

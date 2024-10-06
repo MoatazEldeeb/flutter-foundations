@@ -6,11 +6,14 @@ import 'package:ecommerce_app/src/utils/in_memory_store.dart';
 class FakeLocalCartRepository implements LocalCartRepository {
   FakeLocalCartRepository({this.addDelay = true});
   final bool addDelay;
-  
+
   final _cart = InMemoryStore<Cart>(const Cart());
 
   @override
-  Future<Cart> fetchCart() => Future.value(_cart.value);
+  Future<Cart> fetchCart() {
+    return Future.value(_cart.value);
+
+    }
 
   @override
   Stream<Cart> watchCart() => _cart.stream;
