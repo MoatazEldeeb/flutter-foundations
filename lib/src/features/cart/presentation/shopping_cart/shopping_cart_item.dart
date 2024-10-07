@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:ecommerce_app/src/common_widgets/alert_dialogs.dart';
 import 'package:ecommerce_app/src/common_widgets/async_value_widget.dart';
+import 'package:ecommerce_app/src/features/cart/presentation/shopping_cart/shopping_cart_screen_controller.dart';
 import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
 import 'package:flutter/material.dart';
@@ -34,21 +35,21 @@ class ShoppingCartItem extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final productValue = ref.watch(productProvider(item.productId));
     return AsyncValueWidget<Product?>(
-      value: productValue,
-       data: (product) => Padding(
-      padding: const EdgeInsets.symmetric(vertical: Sizes.p8),
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(Sizes.p16),
-          child: ShoppingCartItemContents(
-            product: product!,
-            item: item,
-            itemIndex: itemIndex,
-            isEditable: isEditable,
-          ),
-        ),
-      ),
-    ));
+        value: productValue,
+        data: (product) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: Sizes.p8),
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(Sizes.p16),
+                  child: ShoppingCartItemContents(
+                    product: product!,
+                    item: item,
+                    itemIndex: itemIndex,
+                    isEditable: isEditable,
+                  ),
+                ),
+              ),
+            ));
   }
 }
 
@@ -71,8 +72,6 @@ class ShoppingCartItemContents extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: error handling
-    // TODO: Inject formatter
     final priceFormatted = NumberFormat.simpleCurrency().format(product.price);
     return ResponsiveTwoColumnLayout(
       startFlex: 1,
@@ -90,28 +89,10 @@ class ShoppingCartItemContents extends StatelessWidget {
           gapH24,
           isEditable
               // show the quantity selector and a delete button
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ItemQuantitySelector(
-                      quantity: item.quantity,
-                      maxQuantity: min(product.availableQuantity, 10),
-                      itemIndex: itemIndex,
-                      // TODO: Implement onChanged
-                      onChanged: (value) {
-                        showNotImplementedAlertDialog(context: context);
-                      },
-                    ),
-                    IconButton(
-                      key: deleteKey(itemIndex),
-                      icon: Icon(Icons.delete, color: Colors.red[700]),
-                      // TODO: Implement onPressed
-                      onPressed: () {
-                        showNotImplementedAlertDialog(context: context);
-                      },
-                    ),
-                    const Spacer(),
-                  ],
+              ? EditOrRemoveItemWidget(
+                  product: product,
+                  item: item,
+                  itemIndex: itemIndex,
                 )
               // else, show the quantity as a read-only label
               : Padding(
@@ -122,6 +103,54 @@ class ShoppingCartItemContents extends StatelessWidget {
                 ),
         ],
       ),
+    );
+  }
+}
+
+// custom widget to show the quantity selector and a delete button
+class EditOrRemoveItemWidget extends ConsumerWidget {
+  const EditOrRemoveItemWidget({
+    super.key,
+    required this.product,
+    required this.item,
+    required this.itemIndex,
+  });
+
+  final Product product;
+  final Item item;
+  final int itemIndex;
+
+  // * Keys for testing using find.byKey()
+  static Key deleteKey(int index) => Key('delete-$index');
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(shoppingCartScreenControllerProvider);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        ItemQuantitySelector(
+          quantity: item.quantity,
+          maxQuantity: min(product.availableQuantity, 10),
+          itemIndex: itemIndex,
+          onChanged: state.isLoading
+              ? null
+              : (quantity) => ref
+                  .read(shoppingCartScreenControllerProvider.notifier)
+                  .updateItemQuantity(item.productId, quantity),
+        ),
+        IconButton(
+          key: deleteKey(itemIndex),
+          icon: Icon(Icons.delete, color: Colors.red[700]),
+          // TODO: Implement onPressed
+          onPressed: state.isLoading
+              ? null
+              : () => ref
+                  .read(shoppingCartScreenControllerProvider.notifier)
+                  .removeItemById(item.productId),
+        ),
+        const Spacer(),
+      ],
     );
   }
 }
