@@ -12,8 +12,7 @@ class FakeLocalCartRepository implements LocalCartRepository {
   @override
   Future<Cart> fetchCart() {
     return Future.value(_cart.value);
-
-    }
+  }
 
   @override
   Stream<Cart> watchCart() => _cart.stream;
