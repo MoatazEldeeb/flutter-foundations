@@ -2,6 +2,7 @@
 
 import 'package:ecommerce_app/src/common_widgets/async_value_widget.dart';
 import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
+import 'package:ecommerce_app/src/features/wishlist/presentation/add_to_wishlist/add_to_wishlist.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
 import 'package:ecommerce_app/src/utils/currency_formatter.dart';
 import 'package:flutter/material.dart';
@@ -31,20 +32,20 @@ class ProductScreen extends StatelessWidget {
         builder: (context, ref, _) {
           final productValue = ref.watch(productProvider(productId));
           return AsyncValueWidget<Product?>(
-            value: productValue,
-            data: (product) => product == null
-              ? EmptyPlaceholderWidget(
-                  message: 'Product not found'.hardcoded,
-                )
-              : CustomScrollView(
-                  slivers: [
-                    ResponsiveSliverCenter(
-                      padding: const EdgeInsets.all(Sizes.p16),
-                      child: ProductDetails(product: product),
-                    ),
-                    ProductReviewsList(productId: productId),
-                  ],
-                ));
+              value: productValue,
+              data: (product) => product == null
+                  ? EmptyPlaceholderWidget(
+                      message: 'Product not found'.hardcoded,
+                    )
+                  : CustomScrollView(
+                      slivers: [
+                        ResponsiveSliverCenter(
+                          padding: const EdgeInsets.all(Sizes.p16),
+                          child: ProductDetails(product: product),
+                        ),
+                        ProductReviewsList(productId: productId),
+                      ],
+                    ));
         },
       ),
     );
@@ -60,7 +61,8 @@ class ProductDetails extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final priceFormatted = ref.watch(currencyFormatterProvider).format(product.price);
+    final priceFormatted =
+        ref.watch(currencyFormatterProvider).format(product.price);
     return ResponsiveTwoColumnLayout(
       startContent: Card(
         child: Padding(
@@ -94,6 +96,8 @@ class ProductDetails extends ConsumerWidget {
               const Divider(),
               gapH8,
               AddToCartWidget(product: product),
+              gapH8,
+              AddToWishlist(product: product),
             ],
           ),
         ),

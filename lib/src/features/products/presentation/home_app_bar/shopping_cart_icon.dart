@@ -29,7 +29,7 @@ class ShoppingCartIcon extends ConsumerWidget {
           Positioned(
             top: Sizes.p4,
             right: Sizes.p4,
-            child: ShoppingCartIconBadge(itemsCount: cartItemsCount),
+            child: IconBadge(itemsCount: cartItemsCount),
           ),
       ],
     );
@@ -37,8 +37,8 @@ class ShoppingCartIcon extends ConsumerWidget {
 }
 
 /// Icon badge showing the items count
-class ShoppingCartIconBadge extends StatelessWidget {
-  const ShoppingCartIconBadge({super.key, required this.itemsCount});
+class IconBadge extends StatelessWidget {
+  const IconBadge({super.key, required this.itemsCount});
   final int itemsCount;
 
   @override

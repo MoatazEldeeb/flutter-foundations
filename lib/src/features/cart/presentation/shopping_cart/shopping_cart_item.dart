@@ -142,7 +142,6 @@ class EditOrRemoveItemWidget extends ConsumerWidget {
         IconButton(
           key: deleteKey(itemIndex),
           icon: Icon(Icons.delete, color: Colors.red[700]),
-          // TODO: Implement onPressed
           onPressed: state.isLoading
               ? null
               : () => ref

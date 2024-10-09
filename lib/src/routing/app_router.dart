@@ -2,6 +2,7 @@ import 'package:ecommerce_app/src/features/authentication/data/fake_auth_reposit
 import 'package:ecommerce_app/src/features/authentication/presentation/account/account_screen.dart';
 import 'package:ecommerce_app/src/features/checkout/presentation/checkout_screen/checkout_screen.dart';
 import 'package:ecommerce_app/src/features/reviews/presentation/leave_review_screen/leave_review_screen.dart';
+import 'package:ecommerce_app/src/features/wishlist/presentation/wishlist_screen/wishlist_screen.dart';
 import 'package:ecommerce_app/src/routing/go_router_refresh_stream.dart';
 import 'package:ecommerce_app/src/routing/not_found_screen.dart';
 import 'package:ecommerce_app/src/features/orders/presentation/orders_list/orders_list_screen.dart';
@@ -20,6 +21,7 @@ enum AppRoute {
   leaveReview,
   cart,
   checkout,
+  wishlist,
   orders,
   account,
   signIn,
@@ -75,7 +77,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
               GoRoute(
                   path: 'cart',
                   name: AppRoute.cart.name,
-                  pageBuilder: (context, state) =>const MaterialPage(
+                  pageBuilder: (context, state) => const MaterialPage(
                       // key: state.pageKey,
                       fullscreenDialog: true,
                       child: ShoppingCartScreen()),
@@ -83,29 +85,32 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                     GoRoute(
                       path: 'checkout',
                       name: AppRoute.checkout.name,
-                      pageBuilder: (context, state) =>const MaterialPage(
-                          fullscreenDialog: true,
-                          child: CheckoutScreen()),
+                      pageBuilder: (context, state) => const MaterialPage(
+                          fullscreenDialog: true, child: CheckoutScreen()),
                     ),
                   ]),
+              GoRoute(
+                path: 'wishlist',
+                name: AppRoute.wishlist.name,
+                pageBuilder: (context, state) => const MaterialPage(
+                    fullscreenDialog: true, child: WishlistScreen()),
+              ),
               GoRoute(
                 path: 'orders',
                 name: AppRoute.orders.name,
                 pageBuilder: (context, state) => const MaterialPage(
-                    fullscreenDialog: true,
-                    child: OrdersListScreen()),
+                    fullscreenDialog: true, child: OrdersListScreen()),
               ),
               GoRoute(
                 path: 'account',
                 name: AppRoute.account.name,
                 pageBuilder: (context, state) => const MaterialPage(
-                    fullscreenDialog: true,
-                    child: AccountScreen()),
+                    fullscreenDialog: true, child: AccountScreen()),
               ),
               GoRoute(
                 path: 'signIn',
                 name: AppRoute.signIn.name,
-                pageBuilder: (context, state) =>const MaterialPage(
+                pageBuilder: (context, state) => const MaterialPage(
                     fullscreenDialog: true,
                     child: EmailPasswordSignInScreen(
                       formType: EmailPasswordSignInFormType.signIn,
