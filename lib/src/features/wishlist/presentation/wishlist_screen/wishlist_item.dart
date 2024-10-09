@@ -49,23 +49,28 @@ class WishlistItemContents extends ConsumerWidget {
       startContent: CustomImage(imageUrl: product.imageUrl),
       spacing: Sizes.p24,
       endContent: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(product.title, style: Theme.of(context).textTheme.headlineSmall),
           gapH24,
           Text(priceFormatted,
               style: Theme.of(context).textTheme.headlineSmall),
           gapH24,
-          state.isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : IconButton(
-                  icon: Icon(Icons.delete, color: Colors.red[700]),
-                  onPressed: state.isLoading
-                      ? null
-                      : () => ref
-                          .read(wishlistScreenControllerProvider.notifier)
-                          .removeProductById(product.id),
-                )
+          Row(
+            children: [
+              const Spacer(),
+              state.isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : IconButton(
+                      icon: Icon(Icons.delete, color: Colors.red[700]),
+                      onPressed: state.isLoading
+                          ? null
+                          : () => ref
+                              .read(wishlistScreenControllerProvider.notifier)
+                              .removeProductById(product.id),
+                    )
+            ],
+          )
         ],
       ),
     );

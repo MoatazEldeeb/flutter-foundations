@@ -19,21 +19,16 @@ class AddToWishlist extends ConsumerWidget {
 
     final state = ref.watch(addToWishlistControllerProvider);
     final alreadyAdded = ref.watch(alreadyAddedToWishlistProvider(product.id));
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        PrimaryButton(
-          isLoading: state.isLoading,
-          onPressed: alreadyAdded
-              ? null
-              : () => ref
-                  .read(addToWishlistControllerProvider.notifier)
-                  .addProductToWishlist(product.id),
-          text: alreadyAdded
-              ? 'Added to wishlist'.hardcoded
-              : 'Add to Wishlist'.hardcoded,
-        )
-      ],
+    return PrimaryButton(
+      isLoading: state.isLoading,
+      onPressed: alreadyAdded
+          ? null
+          : () => ref
+              .read(addToWishlistControllerProvider.notifier)
+              .addProductToWishlist(product.id),
+      text: alreadyAdded
+          ? 'Added to wishlist'.hardcoded
+          : 'Add to Wishlist'.hardcoded,
     );
   }
 }
