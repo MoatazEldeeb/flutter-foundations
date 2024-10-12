@@ -5,6 +5,7 @@ import 'package:ecommerce_app/src/features/cart/domain/cart.dart';
 import 'package:ecommerce_app/src/features/orders/data/fake_orders_repository.dart';
 import 'package:ecommerce_app/src/features/orders/domain/order.dart';
 import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
+import 'package:ecommerce_app/src/utils/current_date_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FakeCheckoutService {
@@ -15,11 +16,12 @@ class FakeCheckoutService {
     final authRepository = ref.read(authRepositoryProvider);
     final remoteCartRepository = ref.read(remoteCartRepositoryProvider);
     final ordersRepository = ref.read(ordersRepositoryProvider);
+    final currentDateBuilder = ref.read(currentDateBuilderProvider);
 
     final uid = authRepository.currentUser!.uid;
     final cart = await remoteCartRepository.fetchCart(uid);
     final total = _totalPrice(cart);
-    final orderDate = DateTime.now();
+    final orderDate = currentDateBuilder();
     final orderId = orderDate.toIso8601String();
     final order = Order(
         id: orderId,

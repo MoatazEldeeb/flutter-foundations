@@ -24,15 +24,13 @@ class ProductReviewCard extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ProductRatingBar(
-                  initialRating: review.score,
+                  initialRating: review.rating,
                   ignoreGestures: true,
                   itemSize: 20,
-                  // TODO: Implement onRatingUpdate
-                  onRatingUpdate: (value) {
-                    showNotImplementedAlertDialog(context: context);
-                  },
+                  onRatingUpdate: (value) {},
                 ),
-                Text(dateFormatted, style: Theme.of(context).textTheme.bodySmall),
+                Text(dateFormatted,
+                    style: Theme.of(context).textTheme.bodySmall),
               ],
             ),
             if (review.comment.isNotEmpty) ...[

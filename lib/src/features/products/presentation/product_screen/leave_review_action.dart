@@ -1,7 +1,6 @@
-// ignore_for_file: unnecessary_null_comparison
-
+import 'package:ecommerce_app/src/features/orders/domain/order.dart';
+import 'package:ecommerce_app/src/features/products/domain/product.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
-import 'package:ecommerce_app/src/features/orders/domain/purchase.dart';
 import 'package:ecommerce_app/src/routing/app_router.dart';
 import 'package:ecommerce_app/src/utils/date_formatter.dart';
 import 'package:flutter/material.dart';
@@ -15,15 +14,24 @@ import 'package:go_router/go_router.dart';
 /// leave a review.
 class LeaveReviewAction extends ConsumerWidget {
   const LeaveReviewAction({super.key, required this.productId});
-  final String productId;
+  final ProductID productId;
 
   @override
-  Widget build(BuildContext context,WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // TODO: Read from data source
-    final purchase = Purchase(orderId: 'abc', orderDate: DateTime.now());
-    if (purchase != null) {
-      // TODO: Inject date formatter
-      final dateFormatted = ref.watch(dateFormatterProvider).format(purchase.orderDate);
+    final orders = [
+      Order(
+        id: 'abc',
+        userId: '123',
+        items: {productId: 1},
+        orderStatus: OrderStatus.confirmed,
+        orderDate: DateTime.now(),
+        total: 15.0,
+      )
+    ];
+    if (orders.isNotEmpty) {
+      final dateFormatted =
+          ref.watch(dateFormatterProvider).format(orders.first.orderDate);
       return Column(
         children: [
           const Divider(),
@@ -45,7 +53,7 @@ class LeaveReviewAction extends ConsumerWidget {
                   .copyWith(color: Colors.green[700]),
               onPressed: () => context.goNamed(
                 AppRoute.leaveReview.name,
-                pathParameters: {'id':productId}
+                pathParameters: {'id': productId},
               ),
             ),
           ),
@@ -53,7 +61,7 @@ class LeaveReviewAction extends ConsumerWidget {
         ],
       );
     } else {
-      return const SizedBox();
+      return const SizedBox.shrink();
     }
   }
 }
