@@ -2,11 +2,14 @@ import 'package:ecommerce_app/src/features/authentication/data/fake_auth_reposit
 import 'package:ecommerce_app/src/features/orders/data/fake_orders_repository.dart';
 import 'package:ecommerce_app/src/features/orders/domain/order.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'user_orders_provider.g.dart';
 
 /// Watch the list of user orders
 /// NOTE: Only watch this provider if the user is signed in.
-final userOrdersProvider = StreamProvider.autoDispose<List<Order>>((ref) {
+@riverpod
+Stream<List<Order>> userOrders(UserOrdersRef ref) {
   final user = ref.watch(authStateChangesProvider).value;
 
   if (user != null) {
@@ -14,10 +17,11 @@ final userOrdersProvider = StreamProvider.autoDispose<List<Order>>((ref) {
   } else {
     return Stream.value([]);
   }
-});
+}
 
-final matchingUserOrdersProvider =
-    StreamProvider.autoDispose.family<List<Order>, ProductID>((ref, productId) {
+@riverpod
+Stream<List<Order>> matchingUserOrders(
+    MatchingUserOrdersRef ref, ProductID productId) {
   final user = ref.watch(authStateChangesProvider).value;
   if (user != null) {
     return ref
@@ -27,4 +31,4 @@ final matchingUserOrdersProvider =
     // If the user is null, return an empty list (no orders)
     return Stream.value([]);
   }
-});
+}

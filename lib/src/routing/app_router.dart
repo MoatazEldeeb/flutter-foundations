@@ -12,8 +12,10 @@ import 'package:ecommerce_app/src/features/products/presentation/products_list/p
 import 'package:ecommerce_app/src/features/cart/presentation/shopping_cart/shopping_cart_screen.dart';
 import 'package:ecommerce_app/src/features/authentication/presentation/sign_in/email_password_sign_in_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'app_router.g.dart';
 
 enum AppRoute {
   home,
@@ -27,7 +29,8 @@ enum AppRoute {
   signIn,
 }
 
-final goRouterProvider = Provider<GoRouter>((ref) {
+@Riverpod(keepAlive: true)
+GoRouter goRouter(GoRouterRef ref) {
   final authRepository = ref.watch(authRepositoryProvider);
   return GoRouter(
       initialLocation: '/',
@@ -119,4 +122,4 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             ]),
       ],
       errorBuilder: (context, state) => const NotFoundScreen());
-});
+}

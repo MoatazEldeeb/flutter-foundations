@@ -1,12 +1,16 @@
 import 'package:ecommerce_app/src/features/cart/domain/cart.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'local_cart_repository.g.dart';
 
 abstract class LocalCartRepository {
   Future<Cart> fetchCart();
   Stream<Cart> watchCart();
   Future<void> setCart(Cart cart);
 }
-final localCartRepositoryProvider = Provider<LocalCartRepository>((ref) {
+
+@Riverpod(keepAlive: true)
+LocalCartRepository localCartRepository(LocalCartRepositoryRef ref) {
   // * Override this in the main method
   throw UnimplementedError();
-});
+}

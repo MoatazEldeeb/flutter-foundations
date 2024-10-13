@@ -8,7 +8,9 @@ import 'package:ecommerce_app/src/features/cart/domain/item.dart';
 import 'package:ecommerce_app/src/features/cart/domain/mutable_cart.dart';
 import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'cart_service.g.dart';
 
 class CartService {
   CartService(
@@ -65,29 +67,33 @@ class CartService {
   }
 }
 
-final cartServiceProvider = Provider<CartService>((ref) {
+@Riverpod(keepAlive: true)
+CartService cartService(CartServiceRef ref) {
   return CartService(
       fakeAuthRepository: ref.watch(authRepositoryProvider),
       localCartRepository: ref.watch(localCartRepositoryProvider),
       remoteCartRepository: ref.watch(remoteCartRepositoryProvider));
-});
+}
 
-final cartProvider = StreamProvider<Cart>((ref) {
+@Riverpod(keepAlive: true)
+Stream<Cart> cart(CartRef ref) {
   final user = ref.watch(authStateChangesProvider).value;
   if (user != null) {
     return ref.watch(remoteCartRepositoryProvider).watchCart(user.uid);
   } else {
     return ref.watch(localCartRepositoryProvider).watchCart();
   }
-});
+}
 
-final cartItemsCountProvider = Provider<int>((ref) {
+@Riverpod(keepAlive: true)
+int cartItemsCount(CartItemsCountRef ref) {
   return ref
       .watch(cartProvider)
       .maybeMap(data: (cart) => cart.value.items.length, orElse: () => 0);
-});
+}
 
-final cartTotalProvider = Provider.autoDispose<double>((ref) {
+@riverpod
+double cartTotal(CartTotalRef ref) {
   final cart = ref.watch(cartProvider).value ?? const Cart();
   final productsList = ref.watch(productsListStreamProvider).value ?? const [];
 
@@ -103,10 +109,10 @@ final cartTotalProvider = Provider.autoDispose<double>((ref) {
   } else {
     return 0.0;
   }
-});
+}
 
-final itemAvailableQuantityProvider =
-    Provider.family<int, Product>((ref, product) {
+@riverpod
+int itemAvailableQuantity(ItemAvailableQuantityRef ref, Product product) {
   final cart = ref.watch(cartProvider).value;
   if (cart != null) {
     final quantity = cart.items[product.id] ?? 0;
@@ -114,4 +120,4 @@ final itemAvailableQuantityProvider =
   } else {
     return product.availableQuantity;
   }
-});
+}

@@ -6,6 +6,9 @@ import 'package:ecommerce_app/src/features/orders/domain/order.dart';
 import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
 import 'package:ecommerce_app/src/utils/current_date_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'fake_checkout_service.g.dart';
 
 class FakeCheckoutService {
   FakeCheckoutService({required this.ref});
@@ -46,6 +49,7 @@ class FakeCheckoutService {
   }
 }
 
-final checkoutServiceProvider = Provider<FakeCheckoutService>((ref) {
+@riverpod
+FakeCheckoutService checkoutService(CheckoutServiceRef ref) {
   return FakeCheckoutService(ref: ref);
-});
+}
