@@ -52,6 +52,18 @@ class FakeProductsRepository {
     _products.value = products;
   }
 
+  Future<List<Product>> searchProducts(String query) async {
+    assert(
+        _products.value.length <= 100,
+        'Client-side search should onlt be performed if the number of products is small.'
+        'Consider doing server-side search for larger datasets.');
+    final productsList = await fetchProductsList();
+    return productsList
+        .where((product) =>
+            product.title.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+  }
+
   static Product? _getProduct(List<Product> products, String id) {
     try {
       return products.firstWhere((product) => product.id == id);
@@ -87,4 +99,19 @@ final productProvider =
   // });
   final productRepository = ref.watch(productsRepositoryProvider);
   return productRepository.watchProduct(id);
+});
+
+final productsListSearchProvider = FutureProvider.autoDispose
+    .family<List<Product>, String>((ref, query) async {
+  final link = ref.keepAlive();
+  Timer(const Duration(seconds: 60), () {
+    link.close();
+  });
+
+  // * debounce/delay network requests
+  await Future.delayed(const Duration(milliseconds: 500));
+
+  final productsRepository = ref.watch(productsRepositoryProvider);
+
+  return productsRepository.searchProducts(query);
 });
