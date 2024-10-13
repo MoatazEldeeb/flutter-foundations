@@ -1,5 +1,4 @@
 import 'package:ecommerce_app/src/features/authentication/data/fake_auth_repository.dart';
-import 'package:ecommerce_app/src/features/cart/domain/cart.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
 import 'package:ecommerce_app/src/features/wishlist/data/local/local_wishlist_repository.dart';
 import 'package:ecommerce_app/src/features/wishlist/data/remote/remote_wishlist_repository.dart';
@@ -76,7 +75,6 @@ final wishlistItemsCountProvider = Provider<int>((ref) {
 final alreadyAddedToWishlistProvider =
     Provider.family<bool, ProductID>((ref, productId) {
   final wishlist = ref.watch(wishlistProvider).value;
-  var found = false;
   if (wishlist != null) {
     for (final id in wishlist.productIDs) {
       if (id == productId) {

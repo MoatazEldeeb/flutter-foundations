@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/src/features/cart/application/cart_service.dart';
+// ignore: unused_import
 import 'package:ecommerce_app/src/features/cart/domain/cart.dart';
 import 'package:ecommerce_app/src/routing/app_router.dart';
 import 'package:flutter/material.dart';

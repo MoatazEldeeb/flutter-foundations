@@ -1,4 +1,3 @@
-import 'package:ecommerce_app/src/features/cart/data/local/local_cart_repository.dart';
 import 'package:ecommerce_app/src/features/wishlist/data/local/local_wishlist_repository.dart';
 import 'package:ecommerce_app/src/features/wishlist/domain/wishlist.dart';
 import 'package:ecommerce_app/src/utils/database.dart';

@@ -1,6 +1,5 @@
 import 'package:ecommerce_app/src/features/authentication/data/fake_auth_repository.dart';
 import 'package:ecommerce_app/src/features/authentication/domain/app_user.dart';
-import 'package:ecommerce_app/src/features/wishlist/application/wishlist_service.dart';
 import 'package:ecommerce_app/src/features/wishlist/data/local/local_wishlist_repository.dart';
 import 'package:ecommerce_app/src/features/wishlist/data/remote/remote_wishlist_repository.dart';
 import 'package:ecommerce_app/src/features/wishlist/domain/mutable_wishlist.dart';
