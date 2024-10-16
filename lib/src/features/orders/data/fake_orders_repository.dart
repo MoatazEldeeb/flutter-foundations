@@ -1,17 +1,16 @@
+import 'package:ecommerce_app/src/features/orders/data/orders_repository.dart';
 import 'package:ecommerce_app/src/features/orders/domain/order.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
 import 'package:ecommerce_app/src/utils/delay.dart';
 import 'package:ecommerce_app/src/utils/in_memory_store.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'fake_orders_repository.g.dart';
-
-class FakeOrdersRepository {
+class FakeOrdersRepository implements OrdersRepository {
   FakeOrdersRepository({this.addDelay = true});
   final bool addDelay;
 
   final _orders = InMemoryStore<Map<String, List<Order>>>({});
 
+  @override
   Stream<List<Order>> watchUserOrders(String uid, {ProductID? productId}) {
     return _orders.stream.map((ordersData) {
       final ordersList = ordersData[uid] ?? [];
@@ -36,9 +35,4 @@ class FakeOrdersRepository {
     value[uid] = userOrders;
     _orders.value = value;
   }
-}
-
-@Riverpod(keepAlive: true)
-FakeOrdersRepository ordersRepository(OrdersRepositoryRef ref) {
-  return FakeOrdersRepository();
 }

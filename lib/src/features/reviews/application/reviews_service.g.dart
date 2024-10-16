@@ -6,11 +6,11 @@ part of 'reviews_service.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$reviewsServiceHash() => r'd91877727c3a90c4267086fa9cd81c8ab6938afd';
+String _$reviewsServiceHash() => r'b321038da884120210faac9a6506f8f1215e3391';
 
 /// See also [reviewsService].
 @ProviderFor(reviewsService)
-final reviewsServiceProvider = Provider<ReviewsService>.internal(
+final reviewsServiceProvider = AutoDisposeProvider<ReviewsService>.internal(
   reviewsService,
   name: r'reviewsServiceProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -20,7 +20,7 @@ final reviewsServiceProvider = Provider<ReviewsService>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef ReviewsServiceRef = ProviderRef<ReviewsService>;
+typedef ReviewsServiceRef = AutoDisposeProviderRef<ReviewsService>;
 String _$userReviewFutureHash() => r'98a78f997bf77c9b2cb80da2ddb23242c933893f';
 
 /// Copied from Dart SDK

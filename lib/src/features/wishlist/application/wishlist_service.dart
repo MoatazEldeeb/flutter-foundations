@@ -1,4 +1,4 @@
-import 'package:ecommerce_app/src/features/authentication/data/fake_auth_repository.dart';
+import 'package:ecommerce_app/src/features/authentication/data/auth_repository.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
 import 'package:ecommerce_app/src/features/wishlist/data/local/local_wishlist_repository.dart';
 import 'package:ecommerce_app/src/features/wishlist/data/remote/remote_wishlist_repository.dart';
@@ -12,7 +12,7 @@ class WishlistService {
       required this.localWishlistRepository,
       required this.remoteWishlistRepository});
 
-  final FakeAuthRepository fakeAuthRepository;
+  final AuthRepository fakeAuthRepository;
   final LocalWishlistRepository localWishlistRepository;
   final RemoteWishlistRepository remoteWishlistRepository;
 

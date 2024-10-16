@@ -1,25 +1,29 @@
-import 'package:ecommerce_app/src/features/authentication/data/fake_auth_repository.dart';
+import 'package:ecommerce_app/src/features/authentication/data/auth_repository.dart';
 import 'package:ecommerce_app/src/features/cart/data/remote/remote_cart_repository.dart';
 import 'package:ecommerce_app/src/features/cart/domain/cart.dart';
+import 'package:ecommerce_app/src/features/checkout/application/checkout_service.dart';
 import 'package:ecommerce_app/src/features/orders/data/fake_orders_repository.dart';
 import 'package:ecommerce_app/src/features/orders/domain/order.dart';
 import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
-import 'package:ecommerce_app/src/utils/current_date_provider.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'fake_checkout_service.g.dart';
+class FakeCheckoutService implements CheckoutService {
+  // * To make writing unit tests easier, here we pass all dependencies as
+  // * arguments rather than using a Ref
+  const FakeCheckoutService({
+    required this.authRepository,
+    required this.remoteCartRepository,
+    required this.fakeOrdersRepository,
+    required this.fakeProducsRepository,
+    required this.currentDateBuilder,
+  });
+  final AuthRepository authRepository;
+  final RemoteCartRepository remoteCartRepository;
+  final FakeOrdersRepository fakeOrdersRepository;
+  final FakeProductsRepository fakeProducsRepository;
+  final DateTime Function() currentDateBuilder;
 
-class FakeCheckoutService {
-  FakeCheckoutService({required this.ref});
-  final Ref ref;
-
+  @override
   Future<void> placeOrder() async {
-    final authRepository = ref.read(authRepositoryProvider);
-    final remoteCartRepository = ref.read(remoteCartRepositoryProvider);
-    final ordersRepository = ref.read(ordersRepositoryProvider);
-    final currentDateBuilder = ref.read(currentDateBuilderProvider);
-
     final uid = authRepository.currentUser!.uid;
     final cart = await remoteCartRepository.fetchCart(uid);
     final total = _totalPrice(cart);
@@ -32,7 +36,7 @@ class FakeCheckoutService {
         orderStatus: OrderStatus.confirmed,
         orderDate: orderDate,
         total: total);
-    await ordersRepository.addOrder(uid, order);
+    await fakeOrdersRepository.addOrder(uid, order);
     await remoteCartRepository.setCart(uid, const Cart());
   }
 
@@ -41,15 +45,9 @@ class FakeCheckoutService {
     if (cart.items.isEmpty) {
       return 0.0;
     }
-    final productsRepository = ref.read(productsRepositoryProvider);
     return cart.items.entries
         .map((entry) =>
-            entry.value * productsRepository.getProduct(entry.key)!.price)
+            entry.value * fakeProducsRepository.getProduct(entry.key)!.price)
         .reduce((value, element) => value + element);
   }
-}
-
-@riverpod
-FakeCheckoutService checkoutService(CheckoutServiceRef ref) {
-  return FakeCheckoutService(ref: ref);
 }

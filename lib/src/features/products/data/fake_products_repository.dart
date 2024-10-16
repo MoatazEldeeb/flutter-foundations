@@ -1,14 +1,12 @@
 import 'dart:async';
 
 import 'package:ecommerce_app/src/constants/test_products.dart';
+import 'package:ecommerce_app/src/features/products/data/products_repository.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
 import 'package:ecommerce_app/src/utils/delay.dart';
 import 'package:ecommerce_app/src/utils/in_memory_store.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'fake_products_repository.g.dart';
-
-class FakeProductsRepository {
+class FakeProductsRepository implements ProductsRepository {
   FakeProductsRepository({this.addDelay = true});
 
   /// Preload with the default list of products when the app starts
@@ -26,15 +24,18 @@ class FakeProductsRepository {
     return _getProduct(_products.value, id);
   }
 
+  @override
   Future<List<Product>> fetchProductsList() async {
     await delay(addDelay);
     return Future.value(_products.value);
   }
 
+  @override
   Stream<List<Product>> watchProductsList() {
     return _products.stream;
   }
 
+  @override
   Stream<Product?> watchProduct(String id) {
     return watchProductsList().map((products) => _getProduct(products, id));
   }
@@ -54,6 +55,7 @@ class FakeProductsRepository {
     _products.value = products;
   }
 
+  @override
   Future<List<Product>> searchProducts(String query) async {
     assert(
         _products.value.length <= 100,
@@ -73,49 +75,4 @@ class FakeProductsRepository {
       return null;
     }
   }
-}
-
-@riverpod
-FakeProductsRepository productsRepository(ProductsRepositoryRef ref) {
-  return FakeProductsRepository();
-}
-
-@riverpod
-Stream<List<Product>> productsListStream(ProductsListStreamRef ref) {
-  final productsRepository = ref.watch(productsRepositoryProvider);
-  return productsRepository.watchProductsList();
-}
-
-@riverpod
-Future<List<Product>> productsListFuture(ProductsListFutureRef ref) {
-  final productsRepository = ref.watch(productsRepositoryProvider);
-  return productsRepository.fetchProductsList();
-}
-
-@riverpod
-Stream<Product?> product(ProductRef ref, ProductID id) {
-  // // This will keep the provider alive
-  // final link = ref.keepAlive();
-  // // This will dispose the provider after 10 seconds
-  // Timer(const Duration(seconds: 10), () {
-  //   link.close();
-  // });
-  final productRepository = ref.watch(productsRepositoryProvider);
-  return productRepository.watchProduct(id);
-}
-
-@riverpod
-Future<List<Product>> productsListSearch(
-    ProductsListSearchRef ref, String query) async {
-  final link = ref.keepAlive();
-  Timer(const Duration(seconds: 60), () {
-    link.close();
-  });
-
-  // * debounce/delay network requests
-  await Future.delayed(const Duration(milliseconds: 500));
-
-  final productsRepository = ref.watch(productsRepositoryProvider);
-
-  return productsRepository.searchProducts(query);
 }

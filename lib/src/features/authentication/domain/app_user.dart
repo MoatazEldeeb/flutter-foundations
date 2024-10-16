@@ -1,9 +1,21 @@
+import 'package:equatable/equatable.dart';
+
 /// Simple class representing the user UID and email.
-class AppUser {
+typedef UserID = String;
+
+class AppUser extends Equatable {
   const AppUser({
     required this.uid,
-    required this.email,
+    this.email,
+    this.emailVerified = false,
   });
-  final String uid;
-  final String email;
+  final UserID uid;
+  final String? email;
+  final bool emailVerified;
+
+  @override
+  List<Object?> get props => [uid, email];
+
+  @override
+  bool? get stringify => true;
 }
