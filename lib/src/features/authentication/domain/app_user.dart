@@ -1,9 +1,7 @@
-import 'package:equatable/equatable.dart';
-
 /// Simple class representing the user UID and email.
 typedef UserID = String;
 
-class AppUser extends Equatable {
+class AppUser {
   const AppUser({
     required this.uid,
     this.email,
@@ -13,9 +11,23 @@ class AppUser extends Equatable {
   final String? email;
   final bool emailVerified;
 
-  @override
-  List<Object?> get props => [uid, email];
+  Future<void> sendEmailVerification() async {
+    // no-op - implemented by subclasses
+  }
 
   @override
-  bool? get stringify => true;
+  String toString() =>
+      'AppUser(uid: $uid, email: $email, emailVerified: $emailVerified)';
+
+  @override
+  bool operator ==(covariant AppUser other) {
+    if (identical(this, other)) return true;
+
+    return other.uid == uid &&
+        other.email == email &&
+        other.emailVerified == emailVerified;
+  }
+
+  @override
+  int get hashCode => uid.hashCode ^ email.hashCode ^ emailVerified.hashCode;
 }

@@ -40,7 +40,6 @@ import 'package:ecommerce_app/src/features/reviews/data/reviews_repository.dart'
 Future<ProviderContainer> createFirebaseProviderContainer(
     {bool addDelay = true}) async {
   // TODO: Replace with Firebase repositories
-  final authRepository = FakeAuthRepository(addDelay: addDelay);
   final productsRepository = FakeProductsRepository(addDelay: addDelay);
   final reviewsRepository = FakeReviewsRepository(addDelay: addDelay);
   // * set delay to false to make it easier to add/remove items
@@ -48,22 +47,10 @@ Future<ProviderContainer> createFirebaseProviderContainer(
   final remoteCartRepository = FakeRemoteCartRepository(addDelay: false);
   final ordersRepository = FakeOrdersRepository(addDelay: addDelay);
   final localWishlistRepository = await SembastWishlistRepository.makeDefault();
-  final checkoutService = FakeCheckoutService(
-    authRepository: authRepository,
-    remoteCartRepository: remoteCartRepository,
-    fakeOrdersRepository: ordersRepository,
-    fakeProducsRepository: productsRepository,
-    currentDateBuilder: () => DateTime.now(),
-  );
-  final reviewsService = FakeReviewsService(
-    fakeProductsRepository: productsRepository,
-    authRepository: authRepository,
-    reviewsRepository: reviewsRepository,
-  );
+
   return ProviderContainer(
     overrides: [
       // repositories
-      authRepositoryProvider.overrideWithValue(authRepository),
       productsRepositoryProvider.overrideWithValue(productsRepository),
       reviewsRepositoryProvider.overrideWithValue(reviewsRepository),
       ordersRepositoryProvider.overrideWithValue(ordersRepository),
@@ -71,9 +58,6 @@ Future<ProviderContainer> createFirebaseProviderContainer(
       remoteCartRepositoryProvider.overrideWithValue(remoteCartRepository),
       localWishlistRepositoryProvider
           .overrideWithValue(localWishlistRepository),
-      // services
-      checkoutServiceProvider.overrideWithValue(checkoutService),
-      reviewsServiceProvider.overrideWithValue(reviewsService),
     ],
     observers: [AsyncErrorLogger()],
   );
