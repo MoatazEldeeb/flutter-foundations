@@ -1,6 +1,5 @@
 import 'package:ecommerce_app/src/features/wishlist/data/local/local_wishlist_repository.dart';
 import 'package:ecommerce_app/src/features/wishlist/data/local/sembast_wishlist_repository.dart';
-import 'package:ecommerce_app/src/utils/database.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ecommerce_app/src/exceptions/async_error_logger.dart';
 import 'package:ecommerce_app/src/features/authentication/data/auth_repository.dart';

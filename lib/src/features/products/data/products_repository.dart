@@ -1,24 +1,38 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'products_repository.g.dart';
 
-abstract class ProductsRepository {
-  Future<List<Product>> fetchProductsList();
+class ProductsRepository {
+  const ProductsRepository(this._firestore);
 
-  Stream<List<Product>> watchProductsList();
+  final FirebaseFirestore _firestore;
 
-  Stream<Product?> watchProduct(ProductID id);
+  // TODO: Implement all methods using Cloud Firestore
+  Future<List<Product>> fetchProductsList() {
+    return Future.value([]);
+  }
 
-  Future<List<Product>> searchProducts(String query);
+  Stream<List<Product>> watchProductsList() {
+    return Stream.value([]);
+  }
+
+  Stream<Product?> watchProduct(ProductID id) {
+    return Stream.value(null);
+  }
+
+  Future<List<Product>> searchProducts(String query) {
+    return Future.value([]);
+  }
 }
 
 @riverpod
 ProductsRepository productsRepository(ProductsRepositoryRef ref) {
-  throw UnimplementedError();
+  return ProductsRepository(FirebaseFirestore.instance);
 }
 
 final productsListStreamProvider =
