@@ -75,4 +75,27 @@ class FakeProductsRepository implements ProductsRepository {
       return null;
     }
   }
+
+  @override
+  Future<void> createProduct(ProductID id, String imageUrl) {
+    // TODO: implement createProduct
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> updateProduct(Product product) {
+    // TODO: implement updateProduct
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> deleteProduct(ProductID productId) {
+    // TODO: implement deleteProduct
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Product?> fetchProduct(ProductID id) {
+    return Future.value(_getProduct(_products.value, id));
+  }
 }

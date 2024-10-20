@@ -15,7 +15,7 @@ class WishlistItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final productValue = ref.watch(productProvider(productID));
+    final productValue = ref.watch(productStreamProvider(productID));
     return AsyncValueWidget<Product?>(
       value: productValue,
       data: (product) => Padding(

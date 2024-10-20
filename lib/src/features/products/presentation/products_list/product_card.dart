@@ -18,8 +18,8 @@ class ProductCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // TODO: Inject formatter
-    final priceFormatted = ref.watch(currencyFormatterProvider).format(product.price);
+    final priceFormatted =
+        ref.watch(currencyFormatterProvider).format(product.price);
     return Card(
       child: InkWell(
         key: productCardKey,
@@ -33,7 +33,8 @@ class ProductCard extends ConsumerWidget {
               gapH8,
               const Divider(),
               gapH8,
-              Text(product.title, style: Theme.of(context).textTheme.titleLarge),
+              Text(product.title,
+                  style: Theme.of(context).textTheme.titleLarge),
               if (product.numRatings >= 1) ...[
                 gapH8,
                 ProductAverageRating(product: product),
