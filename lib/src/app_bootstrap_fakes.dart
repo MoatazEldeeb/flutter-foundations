@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/src/app_bootstrap.dart';
 import 'package:ecommerce_app/src/features/wishlist/data/local/local_wishlist_repository.dart';
 import 'package:ecommerce_app/src/features/wishlist/data/local/sembast_wishlist_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,45 +21,48 @@ import 'package:ecommerce_app/src/features/checkout/application/checkout_service
 
 import 'features/reviews/application/fake_reviews_service.dart';
 
-Future<ProviderContainer> createMocksProviderContainer(
-    {bool addDelay = true}) async {
-  final authRepository = FakeAuthRepository(addDelay: addDelay);
-  final productsRepository = FakeProductsRepository(addDelay: addDelay);
-  final reviewsRepository = FakeReviewsRepository(addDelay: addDelay);
-  // * set delay to false to make it easier to add/remove items
-  final localCartRepository = FakeLocalCartRepository(addDelay: false);
-  final remoteCartRepository = FakeRemoteCartRepository(addDelay: false);
-  final localWishlistRepository = await SembastWishlistRepository.makeDefault();
-  final ordersRepository = FakeOrdersRepository(addDelay: addDelay);
-  // services
-  final checkoutService = FakeCheckoutService(
-    authRepository: authRepository,
-    remoteCartRepository: remoteCartRepository,
-    fakeOrdersRepository: ordersRepository,
-    fakeProducsRepository: productsRepository,
-    currentDateBuilder: () => DateTime.now(),
-  );
-  final reviewsService = FakeReviewsService(
-    fakeProductsRepository: productsRepository,
-    authRepository: authRepository,
-    reviewsRepository: reviewsRepository,
-  );
+extension AppBootstrapFakes on AppBootstrap {
+  Future<ProviderContainer> createFakesProviderContainer(
+      {bool addDelay = true}) async {
+    final authRepository = FakeAuthRepository(addDelay: addDelay);
+    final productsRepository = FakeProductsRepository(addDelay: addDelay);
+    final reviewsRepository = FakeReviewsRepository(addDelay: addDelay);
+    // * set delay to false to make it easier to add/remove items
+    final localCartRepository = FakeLocalCartRepository(addDelay: false);
+    final remoteCartRepository = FakeRemoteCartRepository(addDelay: false);
+    final localWishlistRepository =
+        await SembastWishlistRepository.makeDefault();
+    final ordersRepository = FakeOrdersRepository(addDelay: addDelay);
+    // services
+    final checkoutService = FakeCheckoutService(
+      authRepository: authRepository,
+      remoteCartRepository: remoteCartRepository,
+      fakeOrdersRepository: ordersRepository,
+      fakeProducsRepository: productsRepository,
+      currentDateBuilder: () => DateTime.now(),
+    );
+    final reviewsService = FakeReviewsService(
+      fakeProductsRepository: productsRepository,
+      authRepository: authRepository,
+      reviewsRepository: reviewsRepository,
+    );
 
-  return ProviderContainer(
-    overrides: [
-      // repositories
-      authRepositoryProvider.overrideWithValue(authRepository),
-      productsRepositoryProvider.overrideWithValue(productsRepository),
-      reviewsRepositoryProvider.overrideWithValue(reviewsRepository),
-      ordersRepositoryProvider.overrideWithValue(ordersRepository),
-      localCartRepositoryProvider.overrideWithValue(localCartRepository),
-      remoteCartRepositoryProvider.overrideWithValue(remoteCartRepository),
-      localWishlistRepositoryProvider
-          .overrideWithValue(localWishlistRepository),
-      // services
-      checkoutServiceProvider.overrideWithValue(checkoutService),
-      reviewsServiceProvider.overrideWithValue(reviewsService),
-    ],
-    observers: [AsyncErrorLogger()],
-  );
+    return ProviderContainer(
+      overrides: [
+        // repositories
+        authRepositoryProvider.overrideWithValue(authRepository),
+        productsRepositoryProvider.overrideWithValue(productsRepository),
+        reviewsRepositoryProvider.overrideWithValue(reviewsRepository),
+        ordersRepositoryProvider.overrideWithValue(ordersRepository),
+        localCartRepositoryProvider.overrideWithValue(localCartRepository),
+        remoteCartRepositoryProvider.overrideWithValue(remoteCartRepository),
+        localWishlistRepositoryProvider
+            .overrideWithValue(localWishlistRepository),
+        // services
+        checkoutServiceProvider.overrideWithValue(checkoutService),
+        reviewsServiceProvider.overrideWithValue(reviewsService),
+      ],
+      observers: [AsyncErrorLogger()],
+    );
+  }
 }
