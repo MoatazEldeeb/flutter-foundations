@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app/src/app_bootstrap.dart';
+import 'package:ecommerce_app/src/features/cart/data/local/sembast_cart_repository.dart';
 import 'package:ecommerce_app/src/features/wishlist/data/local/local_wishlist_repository.dart';
 import 'package:ecommerce_app/src/features/wishlist/data/local/sembast_wishlist_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ecommerce_app/src/exceptions/async_error_logger.dart';
-import 'package:ecommerce_app/src/features/cart/data/local/fake_local_cart_repository.dart';
 import 'package:ecommerce_app/src/features/cart/data/local/local_cart_repository.dart';
 import 'package:ecommerce_app/src/features/cart/data/remote/fake_remote_cart_repository.dart';
 import 'package:ecommerce_app/src/features/cart/data/remote/remote_cart_repository.dart';
@@ -39,9 +39,8 @@ extension AppBootstrapFirebase on AppBootstrap {
       {bool addDelay = true}) async {
     // TODO: Replace with Firebase repositories
     final reviewsRepository = FakeReviewsRepository(addDelay: addDelay);
+    final localCartRepository = await SembastCartRepository.makeDefault();
     // * set delay to false to make it easier to add/remove items
-    final localCartRepository = FakeLocalCartRepository(addDelay: false);
-    final remoteCartRepository = FakeRemoteCartRepository(addDelay: false);
     final ordersRepository = FakeOrdersRepository(addDelay: addDelay);
     final localWishlistRepository =
         await SembastWishlistRepository.makeDefault();
@@ -52,7 +51,6 @@ extension AppBootstrapFirebase on AppBootstrap {
         reviewsRepositoryProvider.overrideWithValue(reviewsRepository),
         ordersRepositoryProvider.overrideWithValue(ordersRepository),
         localCartRepositoryProvider.overrideWithValue(localCartRepository),
-        remoteCartRepositoryProvider.overrideWithValue(remoteCartRepository),
         localWishlistRepositoryProvider
             .overrideWithValue(localWishlistRepository),
       ],

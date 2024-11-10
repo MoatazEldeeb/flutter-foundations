@@ -16,10 +16,12 @@ class PaymentPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen<double>(cartTotalProvider, (_, cartTotal) {
-      if (cartTotal == 0.0) {
-        context.goNamed(AppRoute.orders.name);
-      }
+    ref.listen<AsyncValue<double>>(cartTotalProvider, (_, cartTotalAsync) {
+      cartTotalAsync.whenOrNull(data: (cartTotal) {
+        if (cartTotal == 0.0) {
+          context.goNamed(AppRoute.orders.name);
+        }
+      });
     });
     final cartValue = ref.watch(cartProvider);
     return AsyncValueWidget<Cart>(
