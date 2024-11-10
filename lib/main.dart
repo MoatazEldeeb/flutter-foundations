@@ -15,6 +15,7 @@ void main() async {
   usePathUrlStrategy();
 
   final appBootstrap = AppBootstrap();
+  appBootstrap.setupEmulators();
 
   final container = await appBootstrap.createFirebaseProviderContainer();
   final root = appBootstrap.createRootWidget(container: container);

@@ -43,15 +43,24 @@ GoRouter goRouter(GoRouterRef ref) {
   return GoRouter(
       initialLocation: '/',
       debugLogDiagnostics: false,
-      redirect: (context, state) {
-        final isLoggedIn = authRepository.currentUser != null;
+      redirect: (context, state) async {
+        final user = authRepository.currentUser;
+        final isLoggedIn = user != null;
         final path = state.uri.path;
         if (isLoggedIn) {
           if (path == '/signIn') {
             return '/';
           }
+          final isAdmin = await user.isAdmin();
+          if (!isAdmin && path.startsWith('/admin')) {
+            return '/';
+          }
         } else {
           if (path == '/account' || path == '/orders') {
+            return '/';
+          }
+
+          if (path.startsWith('/admin')) {
             return '/';
           }
         }

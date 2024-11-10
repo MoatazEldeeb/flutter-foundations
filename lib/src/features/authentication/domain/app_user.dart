@@ -15,6 +15,14 @@ class AppUser {
     // no-op - implemented by subclasses
   }
 
+  Future<bool> isAdmin() {
+    return Future.value(false);
+  }
+
+  Future<void> forceRefreshIdToken() async {
+    // no-op - implemented by subclasses
+  }
+
   @override
   String toString() =>
       'AppUser(uid: $uid, email: $email, emailVerified: $emailVerified)';

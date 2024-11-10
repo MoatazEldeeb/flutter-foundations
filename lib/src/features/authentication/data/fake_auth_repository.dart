@@ -73,4 +73,7 @@ class FakeAuthRepository implements AuthRepository {
     // update the auth state
     _authState.value = user;
   }
+
+  @override
+  Stream<AppUser?> idTokenChanges() => _authState.stream;
 }

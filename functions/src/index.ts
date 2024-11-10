@@ -1,19 +1,34 @@
-/**
- * Import function triggers from their respective submodules:
- *
- * import {onCall} from "firebase-functions/v2/https";
- * import {onDocumentWritten} from "firebase-functions/v2/firestore";
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */
+import * as admin from "firebase-admin"
+import * as functions from "firebase-functions/v1"
+import * as logger from "firebase-functions/logger"
+import * as firestore from "@google-cloud/firestore"
 
-import {onRequest} from "firebase-functions/v2/https";
-import * as logger from "firebase-functions/logger";
+admin.initializeApp()
 
-// Start writing functions
-// https://firebase.google.com/docs/functions/typescript
+export const makeAdminIfWhiteListed = functions.auth.user().onCreate(async (user,_) =>{
+    const email = user.email
+    if(email === undefined){
+        logger.log(`User ${user.uid} doesn't have an email address`)
+        return
+    }
 
-// export const helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+    if(!email.endsWith("@test.com")){
+        logger.log(`${email} doesn't belong to a whitelisted domain`)
+        return
+    }
+
+    if(user.customClaims?.admin === true){
+        logger.log(`${email} is already an admin`)
+        return
+    }
+
+    admin.auth().setCustomUserClaims(user.uid, {
+        admin: true,
+    })
+
+    await admin.firestore().doc(`metadata/${user.uid}`).set({
+        refreshTime: firestore.FieldValue.serverTimestamp(),
+    })
+
+    logger.log(`Custom claim set! ${email} is now an admin`)
+})
